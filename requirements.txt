@@ -1,0 +1,7 @@
+fastapi
+httpx
+SQLModel
+greenlet
+aiosqlite
+
+pytest
