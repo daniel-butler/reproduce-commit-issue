@@ -12,7 +12,7 @@ pytest -vv
 ```
 
 
-The error can be avoided by creating and using a variable before the final `db.commit()`.
+The error can be avoided by creating and using a variable before the final `db.commit()` [here](https://github.com/daniel-butler/reproduce-commit-issue/blob/master/app.py#L60).
 
 
 
