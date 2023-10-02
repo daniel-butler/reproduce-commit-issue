@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel, Field, select
+from sqlmodel import SQLModel, Field
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -48,27 +48,15 @@ app.on_event("startup")(create_db_and_tables)
 
 
 @app.post("/")
-async def root(input: Input, db: AsyncSession = Depends(get_db)):
-    print(f"Received: {input}")
-
-    table_two = TableTwo(content="\n")
-    db.add(table_two)
-    await db.commit()
-    await db.refresh(table_two)
-    print(f"Created table two with id: {table_two.id}")
-
-    entry = Entry(content=''.join(input.content))
+async def root(inpt: Input, db: AsyncSession = Depends(get_db)):
+    entry = Entry(content=inpt.content)
     db.add(entry)
     await db.commit()
     await db.refresh(entry)
-    print(f"Created entry with id: {entry.id}")
+    print(f"Created entry with id: {entry.id}")  # Can access the id here!
 
-    table_two.content = input.content
-    entry_id = entry.id   # <--- This makes it work
+    table_two = TableTwo(content="")
+    db.add(table_two)
+    entry_id = entry.id   # <--- Using this variable in the response will avoid the error
     await db.commit()
-    return {
-        "new_entry": {
-            "id": entry.id,
-        }
-    }
-
+    return {"id": entry.id}
