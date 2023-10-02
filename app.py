@@ -57,6 +57,6 @@ async def root(inpt: Input, db: AsyncSession = Depends(get_db)):
 
     table_two = TableTwo(content="")
     db.add(table_two)
-    entry_id = entry.id   # <--- Using this variable in the response will avoid the error
     await db.commit()
+    await db.refresh(entry)  # <--- Refreshing from the database again fixes the issue
     return {"id": entry.id}

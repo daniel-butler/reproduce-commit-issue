@@ -11,7 +11,7 @@ from app import app, get_db
 DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 connect_args = {"check_same_thread": False}
 engine = create_async_engine(DATABASE_URL, echo=True, connect_args=connect_args)
-TestingSessionLocal = sessionmaker(autocommit=False, bind=engine, class_=AsyncSession)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
 
 
 async def override_get_db():
